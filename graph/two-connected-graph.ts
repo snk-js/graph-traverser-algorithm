@@ -86,9 +86,9 @@ const hasConnectionToVertice = (vertice, edges, actualVertice) => {
 const traverseGraphAndFindBridges = (edges, vertice, edge, visited = []) => {
   if (!edges[vertice]) return false;
   if (!edges[vertice][edge])
-    return traverseGraph(edges, vertice + 1, 0, visited);
+    return traverseGraphAndFindBridges(edges, vertice + 1, 0, visited);
   if (visited[Number(`${vertice}${edge}`)])
-    return traverseGraph(edges, vertice, edge + 1, visited);
+    return traverseGraphAndFindBridges(edges, vertice, edge + 1, visited);
   visited.push(Number(`${vertice}${edge}`), Number(`${edge}${vertice}`));
 
   // to know if the edge is a bridge
@@ -99,11 +99,12 @@ const traverseGraphAndFindBridges = (edges, vertice, edge, visited = []) => {
   const nextEdge = edges[vertice][edge];
   const nextVertice = edges[nextEdge];
 
-  if (!nextVertice) return traverseGraph(edges, vertice, edge + 1, visited);
+  if (!nextVertice)
+    return traverseGraphAndFindBridges(edges, vertice, edge + 1, visited);
 
   if (!hasConnectionToVertice(vertice, edges, nextEdge)) return true;
 
-  return traverseGraph(edges, vertice, edge + 1, visited);
+  return traverseGraphAndFindBridges(edges, vertice, edge + 1, visited);
 };
 
 // console.log(twoEdgeConnectedGraph(graph1));
